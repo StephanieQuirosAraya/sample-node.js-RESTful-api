@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
+
 const mysql = require('mysql2');
 
-app.use(express.json())
+app.use(express.json());
 
 
 const connection = mysql.createConnection({
@@ -12,22 +13,20 @@ const connection = mysql.createConnection({
       database: 'sample-schema',
     });
 
-connection.query('SELECT * FROM client', 
-    (err, results)=> {
-        console.log(results)
-    });
-
-
 
 app.get('/api/v1/clients', (req, res) => {
     console.log(`Request from ${req.ip} to  path ${req.url}.`)
-    connection.query('SELECT * FROM client',
+    
+    
+    connection.query('SELECT * FROM client;',
     (err, data, fields) => {
         if (err) throw err;
         res.status(200).json({
             data,
         })
     })
+
+
 });
 
 
@@ -40,10 +39,10 @@ app.post('/api/v1/client/:id', (req,res) => {
         console.log(`Request from ${req.ip} to  path ${req.url} was invalid, code 418, no name.`)
         res.status(418).send({ message: 'There is no client name!' })
     } else {
-        connection.query('INSERT INTO client VALUE (?, ?)',
+        connection.query('INSERT INTO client VALUE (?, ?);',
         [id, name],
-        (err, results) => {
-            console.log(results)
+        (err, data, fields) => {
+            console.log(data)
         })
         res.status(200).send('ok')
     }
@@ -56,8 +55,3 @@ app.listen(
     PORT, 
     () => console.log(`Alive in http://localhost:${PORT}`)
 )
-
-
-//npm init -y
-
-//npm install express mysql2

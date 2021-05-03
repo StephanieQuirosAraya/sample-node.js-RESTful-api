@@ -21,10 +21,7 @@ app.post('/api/v1/client/:id', (req,res) => {
         res.status(418).send({ message: 'There is no client name!' })
     } else {
         console.log(`Request from ${req.ip} to  path ${req.url} valid request. Registered client ${id} named ${name}.`)
-        res.send({
-            id: id,
-            name: name
-        })
+        res.status(201).send()
     }
 });
 
